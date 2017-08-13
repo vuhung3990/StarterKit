@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">StarterKit</string>
+    <string name="grant_permission_manual">Manual</string>
+</resources>
