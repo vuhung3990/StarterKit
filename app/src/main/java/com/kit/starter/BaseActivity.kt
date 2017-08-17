@@ -13,9 +13,10 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import dev22.com.contactutility.BasePresenter
-import io.reactivex.*
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import java.util.*
+import javax.inject.Inject
 
 
 /**
@@ -23,27 +24,27 @@ import java.util.*
  *
  * @param <T> presenter class implement base presenter
  */
-abstract class BaseActivity<out T : BasePresenter> : AppCompatActivity() {
-    private var presenter: T? = null
+abstract class BaseActivity<T : BasePresenter> : AppCompatActivity() {
+    @Inject
+    lateinit var presenter: T
     private var permissions: Array<out String>? = null
     private var permissionRequestCode: Int? = null
     private lateinit var requestListener: ObservableEmitter<PermissionRequestResult>
 
     override fun onPause() {
         super.onPause()
-        presenter?.unsubscribe()
+        presenter.unsubscribe()
     }
 
     override fun onResume() {
         super.onResume()
-        presenter?.subscribe()
+        presenter.subscribe()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injectDI()
         setContentView(getLayoutContent())
-        presenter = getPresenterForAutoDisposeRx()
         initView()
     }
 
@@ -51,11 +52,6 @@ abstract class BaseActivity<out T : BasePresenter> : AppCompatActivity() {
      * @return resource id of content layout
      */
     abstract fun getLayoutContent(): Int
-
-    /**
-     * @return presenter for auto subscribe and unsubscribe
-     */
-    abstract fun getPresenterForAutoDisposeRx(): T?
 
     /**
      * this func call in onCreate, after bindView

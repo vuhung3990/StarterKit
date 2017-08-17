@@ -11,5 +11,5 @@ import io.reactivex.disposables.CompositeDisposable
 @Module
 class CompositeDisableModule {
     @Provides
-    fun provideCompositeDisable() = CompositeDisposable()
+    fun provideCompositeDisposable() = CompositeDisposable()
 }

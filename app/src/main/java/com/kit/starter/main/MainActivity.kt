@@ -1,19 +1,21 @@
 package com.kit.starter.main
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import com.crashlytics.android.Crashlytics
+import com.kit.starter.BaseActivity
 import com.kit.starter.R
-import io.fabric.sdk.android.Fabric
+import com.kit.starter.di.CompositeDisableModule
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<MainPresenter>(), MainConstract.View {
+    override fun getLayoutContent(): Int = R.layout.activity_main
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun initView() {
 
-        // TODO: change package
-        // TODO: init fabric crash report
+    }
+
+    override fun injectDI() {
+        DaggerMainComponent.builder()
+                .compositeDisableModule(CompositeDisableModule())
+                .mainModule(MainModule(this))
+                .build()
+                .inject(this)
     }
 }
