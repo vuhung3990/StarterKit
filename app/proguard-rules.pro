@@ -66,7 +66,6 @@
 # dagger2 will run after proguard, so we don't need rules for dagger2
 
 # leak canary
-
 -dontwarn com.squareup.haha.guava.**
 -dontwarn com.squareup.haha.perflib.**
 -dontwarn com.squareup.haha.trove.**
