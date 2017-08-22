@@ -1,8 +1,8 @@
 package com.kit.starter
 
 import android.app.Application
-import com.squareup.leakcanary.LeakCanary
 import com.crashlytics.android.Crashlytics
+import com.squareup.leakcanary.LeakCanary
 import io.fabric.sdk.android.Fabric
 
 

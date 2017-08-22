@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import dev22.com.contactutility.BasePresenter
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import java.util.*
@@ -75,21 +74,19 @@ abstract class BaseActivity<T : BasePresenter> : AppCompatActivity() {
     protected fun requestPermissionHelper(vararg permission: String, permissionRequestCode: Int): Observable<PermissionRequestResult> {
         // if one or more of permission not granted
         // don't request every time because it's async and block user input
-        return Observable.create(
-                { requestListener ->
-                    run {
-                        this.requestListener = requestListener
-                        if (!isGrantedAll(permission)) {
-                            this.permissions = permission
-                            this.permissionRequestCode = permissionRequestCode
-                            ActivityCompat.requestPermissions(this,
-                                    permission,
-                                    permissionRequestCode)
-                        } else {
-                            requestListener.onNext(PermissionRequestResult(permissionRequestCode, PermissionRequestResult.STATUS_PERMISSION_GRANTED))
-                        }
-                    }
-                })
+
+        return Observable.create<PermissionRequestResult> {
+            this.requestListener = it
+            if (!isGrantedAll(permission)) {
+                this.permissions = permission
+                this.permissionRequestCode = permissionRequestCode
+                ActivityCompat.requestPermissions(this,
+                        permission,
+                        permissionRequestCode)
+            } else {
+                requestListener.onNext(PermissionRequestResult(permissionRequestCode, PermissionRequestResult.STATUS_PERMISSION_GRANTED))
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -107,11 +104,7 @@ abstract class BaseActivity<T : BasePresenter> : AppCompatActivity() {
      * @return true: if all granted else otherwise
      */
     protected fun isGrantedAll(permissions: Array<out String>): Boolean {
-        for (permission in permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
-                return false
-        }
-        return true
+        return permissions.none { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
     }
 
     /**
@@ -119,10 +112,7 @@ abstract class BaseActivity<T : BasePresenter> : AppCompatActivity() {
      * @return true: if all granted
      */
     private fun isGrantedAll(grantResults: IntArray): Boolean {
-        for (gr in grantResults) {
-            if (gr != PackageManager.PERMISSION_GRANTED) return false
-        }
-        return true
+        return grantResults.none { it != PackageManager.PERMISSION_GRANTED }
     }
 
     /**

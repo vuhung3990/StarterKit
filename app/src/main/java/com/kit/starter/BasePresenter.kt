@@ -1,8 +1,5 @@
-package dev22.com.contactutility
+package com.kit.starter
 
-/**
- * Created by dev22 on 6/28/17.
- */
 interface BasePresenter {
     fun subscribe()
     fun unsubscribe()
