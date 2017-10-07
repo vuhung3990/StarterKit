@@ -12,11 +12,11 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import java.util.*
 import javax.inject.Inject
-
 
 /**
  * base activity for automatic subscribe and unsubscribe automatically
@@ -41,8 +41,8 @@ abstract class BaseActivity<T : BasePresenter> : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        injectDI()
         setContentView(getLayoutContent())
         initView()
     }
@@ -56,11 +56,6 @@ abstract class BaseActivity<T : BasePresenter> : AppCompatActivity() {
      * this func call in onCreate, after bindView
      */
     abstract fun initView()
-
-    /**
-     * inject dependency
-     */
-    abstract fun injectDI()
 
     /**
      * request permission(s), **DON'T FORGET INCLUDE PERMISSION IN MANIFEST**

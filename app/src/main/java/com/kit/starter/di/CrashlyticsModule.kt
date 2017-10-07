@@ -6,6 +6,7 @@ import dagger.Provides
 
 /**
  * Created by stupidman on 9/25/17.
+ * provide Crashlytics object for crash report
  */
 @Module
 class CrashlyticsModule {

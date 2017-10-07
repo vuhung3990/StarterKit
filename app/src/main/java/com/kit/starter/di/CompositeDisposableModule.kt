@@ -6,10 +6,10 @@ import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Created by HungVu on 6/28/17.
- * for multiple stream
+ * provide composite disposable object for presenter
  */
 @Module
-class CompositeDisableModule {
+class CompositeDisposableModule {
     @Provides
     fun provideCompositeDisposable() = CompositeDisposable()
 }
